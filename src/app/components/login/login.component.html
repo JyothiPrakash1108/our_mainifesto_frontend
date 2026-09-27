@@ -1,0 +1,135 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">
+        <span class="logo-icon">📋</span>
+        <span class="logo-text">Our Manifesto</span>
+      </div>
+      <h1>{{ step === 'email' ? 'Sign In' : 'Verify OTP' }}</h1>
+      <p class="subtitle">{{ step === 'email' ? 'Enter your email to get started' : 'Enter the OTP sent to your email' }}</p>
+    </div>
+
+    <form class="login-form">
+      <!-- Email Step -->
+      <div *ngIf="step === 'email'" class="form-section">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="example@example.com"
+            class="form-input"
+            [disabled]="loading"
+          />
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary btn-block"
+          (click)="sendOtp()"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading">Send OTP</span>
+          <span *ngIf="loading" class="spinner"></span>
+        </button>
+      </div>
+
+      <!-- OTP Step -->
+      <div *ngIf="step === 'otp'" class="form-section">
+        <div class="form-group">
+          <label for="otp">One-Time Password</label>
+          <input
+            type="text"
+            id="otp"
+            [(ngModel)]="otp"
+            name="otp"
+            placeholder="000000"
+            class="form-input otp-input"
+            [disabled]="loading || otpExpired"
+            maxlength="6"
+            inputmode="numeric"
+          />
+          <div class="otp-info">
+            <span class="timer-label">OTP expires in: </span>
+            <span class="timer" [class.expired]="otpExpired">{{ getTimerDisplay() }}</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary btn-block"
+          (click)="verifyOtp()"
+          [disabled]="loading || otpExpired"
+        >
+          <span *ngIf="!loading">Verify OTP</span>
+          <span *ngIf="loading" class="spinner"></span>
+        </button>
+
+        <div class="otp-actions">
+          <button
+            type="button"
+            class="link-button"
+            (click)="resendOtp()"
+            [disabled]="loading || !otpExpired"
+          >
+            Resend OTP
+          </button>
+          <button
+            type="button"
+            class="link-button"
+            (click)="goBack()"
+            [disabled]="loading"
+          >
+            Use Different Email
+          </button>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-error">
+        <span class="alert-icon">⚠️</span>
+        <span>{{ error }}</span>
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="message" class="alert alert-success">
+        <span class="alert-icon">✓</span>
+        <span>{{ message }}</span>
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <p>First time here? <a href="/" class="link">Go back to home</a></p>
+    </div>
+  </div>
+
+  <!-- Side Illustration -->
+  <div class="login-illustration">
+    <div class="illustration-content">
+      <div class="icon">🗳️</div>
+      <h2>Democracy in Action</h2>
+      <p>Your voice matters. Join thousands of Indians creating change.</p>
+      <div class="features-list">
+        <div class="feature">
+          <span class="check">✓</span>
+          <span>Secure email verification</span>
+        </div>
+        <div class="feature">
+          <span class="check">✓</span>
+          <span>Create petitions instantly</span>
+        </div>
+        <div class="feature">
+          <span class="check">✓</span>
+          <span>Reach thousands of supporters</span>
+        </div>
+        <div class="feature">
+          <span class="check">✓</span>
+          <span>Make real change</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
